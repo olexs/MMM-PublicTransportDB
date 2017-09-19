@@ -6,16 +6,16 @@ let DbFetcher = function (config) {
 };
 
 let typeData = {
-    'U': {
-        type: 'subway',
+    'regional': {
+        type: 'regional',
         color: '#0067AD'
     },
-    'Bus': {
+    'bus': {
         type: 'bus',
         color: '#a5037b'
     },
-    's': {
-        type: 'subway',
+    'tram': {
+        type: 'tram',
         color: '#006F35'
     }
 }
@@ -54,6 +54,7 @@ DbFetcher.prototype.fetchDepartures = function () {
     };
 
     return dbClient.departures(this.config.stationId, opt).then((response) => {
+
         return this.processData(response)
     });
 };
@@ -65,39 +66,38 @@ DbFetcher.prototype.processData = function (data) {
         departuresArray: []
     };
 
-    //console.log(data);
-
     data.forEach((row) => {
-        if (!this.config.ignoredStations.includes(row.station.id)) {
-
-            //console.log('------------------------------------------------------------------------------');
-            console.log('Parsing: ' + row.product.name + ' nach ' + row.direction + ' um ' + row.when);
-            console.log(JSON.stringify(row.product));
-
+        
+	var ignored = false;
+	this.config.ignoredStations.forEach(function(element) {
+            if (element == row.station.id){
+		ignored = true;
+	    }
+	});
+        if (!ignored) {
+	
             let delay = row.delay;
             if (!delay) {
                 row.delay = 0
             }
 
-            let productType = row.product.type;
-            if (!productType && typeData[row.product.productName]) {
-                productType = typeData[row.product.productName];
+            let productType = null;
+            if (!productType && typeData[row.line.product]) {
+                productType = typeData[row.line.product];
             } 
-            if (!productType && row.product.productName) {
-                productType = { type: row.product.productName, color: "#006F35" }
+            if (!productType && row.line.productName) {
+                productType = { type: row.line.product, color: "#006F35" }
             }
 
             let current = {
                 when: row.when,
                 delay: row.delay,
-                line: row.product.name,
-                nr: row.product.nr,
+                line: row.line.name,
+                nr: row.line.productCode,
                 type: productType.type,
                 color: productType.color,
                 direction: row.direction
             };
-
-            console.log(current);
 
             departuresData.departuresArray.push(current);
         }
@@ -110,8 +110,8 @@ DbFetcher.prototype.processData = function (data) {
 function compare(a, b) {
 
     // delay must be converted to milliseconds
-    let timeA = a.when.getTime() + a.delay * 1000;
-    let timeB = b.when.getTime() + b.delay * 1000;
+    let timeA = new Date(a.when).getTime();
+    let timeB = new Date(b.when).getTime();
 
     if (timeA < timeB) {
         return -1;
