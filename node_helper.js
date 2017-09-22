@@ -36,10 +36,13 @@ module.exports = NodeHelper.create({
     },
 
     getDepartures: function (stationId) {
-        this.departuresFetchers[stationId].fetchDepartures().then((departuresData) => {
-            this.pimpDeparturesArray(departuresData.departuresArray);
-            this.sendSocketNotification('DEPARTURES', departuresData);
-        });
+
+	if (this.departuresFetchers[stationId] != null){
+	        this.departuresFetchers[stationId].fetchDepartures().then((departuresData) => {
+        	    this.pimpDeparturesArray(departuresData.departuresArray);
+	            this.sendSocketNotification('DEPARTURES', departuresData);
+        	});
+	}
     },
 
     pimpDeparturesArray: function (departuresArray) {
