@@ -6,7 +6,7 @@ Module.register("MMM-PublicTransportDB", {
     defaults: {
         name: "MMM-PublicTransportDB",
         hidden: false,
-        stationId: 9160003,
+        stationId: '9160003',
         ignoredStations: [],                // Which stations should be ignored? (comma-separated list of station IDs)
         excludedTransportationTypes: '',    // Which transportation types should not be shown on the mirror? (comma-separated list of types) possible values: bus,tram,suburban,subway,ferry
         direction: null,                    // Which direction should be displayed? (destination station ID)
@@ -48,7 +48,6 @@ Module.register("MMM-PublicTransportDB", {
     },
 
     getDom: function () {
-
         let wrapper = document.createElement("div");
         wrapper.className = "ptbWrapper";
 
@@ -227,7 +226,6 @@ Module.register("MMM-PublicTransportDB", {
     },
 
     getRow: function (current) {
-
         let currentWhen = moment(current.when);
 
         let row = document.createElement("tr");
@@ -361,5 +359,13 @@ Module.register("MMM-PublicTransportDB", {
             }
         }
 
+        if (notification === 'FETCH_ERROR') {
+            this.config.loaded = true;
+            if (payload.stationId === this.config.stationId) {
+                // Empty error object
+                this.error = payload;
+                this.updateDom(3000);
+            }
+        }
     }
 });
