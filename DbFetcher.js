@@ -88,7 +88,8 @@ DbFetcher.prototype.processData = function (data) {
                 delay: row.delay,
                 line: row.line.name,
                 nr: row.line.class,
-                type: productType.type,
+                //type: productType.type,
+                type: row.line.product,
                 color: productType.color,
                 direction: row.direction
             };
