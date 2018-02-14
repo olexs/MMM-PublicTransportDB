@@ -6,6 +6,7 @@
     display: table;
     border-collapse: collapse;
     border-spacing: 1px;
+    white-space:nowrap;
 }
 
 .ruleCell {
@@ -125,7 +126,7 @@
 .dbsign {
     color: #FFFFFF;
     text-align: center;
-    width: 2.5em;
+    width: 4.5em;
     height: 1.25em;
     background: #BE1414;
     position: relative;
