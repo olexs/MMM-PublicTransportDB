@@ -64,7 +64,7 @@ Here is an example of an entry in `config.js`:
 
 ``` JavaScript
 {
-    module: 'MMM-PublicTransportBerlin',
+    module: 'MMM-PublicTransportDB',
     position: 'top_right',
     config: {
         name: "Alexanderplatz",
@@ -91,7 +91,7 @@ Here is an example of an entry in `config.js`:
 
 ## Multiple Modules
 
-Multiple instances of this module are possible. Just add another entry of the MMM-PublicTransportBerlin module to the `config.js` of your mirror.
+Multiple instances of this module are possible. Just add another entry of the MMM-PublicTransportDB module to the `config.js` of your mirror.
 
 ## Special Thanks
 
