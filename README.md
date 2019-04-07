@@ -64,7 +64,7 @@ Here is an example of an entry in `config.js`:
 
 ``` JavaScript
 {
-    module: 'MMM-PublicTransportBerlin',
+    module: 'MMM-PublicTransportDB',
     position: 'top_right',
     config: {
         name: "Alexanderplatz",
