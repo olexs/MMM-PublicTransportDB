@@ -1,3 +1,7 @@
+---
+(!) This module is outdated and no longer recommended for use. I recommend https://github.com/raywo/MMM-PublicTransportHafas instead - it provides all the same functionality and more.
+---
+
 # MMM-PublicTransportDB
 
 MMM-PublicTransportDB is a module for the [MagicMirror](https://github.com/MichMich/MagicMirror) project by 
