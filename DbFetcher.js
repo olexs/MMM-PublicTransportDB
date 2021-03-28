@@ -31,7 +31,6 @@ DbFetcher.prototype.getStationName = function () {
 };
 
 DbFetcher.prototype.fetchDepartures = function () {
-
     // when value for a request is calculated to be 5 minutes before delay time
     let when;
 
@@ -59,19 +58,16 @@ DbFetcher.prototype.fetchDepartures = function () {
 };
 
 DbFetcher.prototype.processData = function (data) {
-
     let departuresData = {
         stationId: this.config.stationId,
         departuresArray: []
     };
 
-    //console.log(data);
-
     data.forEach((row) => {
-        if (!this.config.ignoredStations.includes(row.station.id)) {
+        if (!this.config.ignoredStations.includes(row.station.id) && this.config.excludedTransportationTypes.search(row.line.mode) == -1) {
 
             //console.log('------------------------------------------------------------------------------');
-            console.log('Parsing: ' + row.product.name + ' nach ' + row.direction + ' um ' + row.when);
+            console.log('Parsing: ' + row.line.name + ' nach ' + row.direction + ' um ' + row.when);
             console.log(JSON.stringify(row.product));
 
             let delay = row.delay;
@@ -79,20 +75,21 @@ DbFetcher.prototype.processData = function (data) {
                 row.delay = 0
             }
 
-            let productType = row.product.type;
-            if (!productType && typeData[row.product.productName]) {
-                productType = typeData[row.product.productName];
+
+            let productType = row.line.product;
+            if (!productType && typeData[row.line.productName]) {
+                productType = typeData[row.line.productName];
             } 
-            if (!productType && row.product.productName) {
-                productType = { type: row.product.productName, color: "#006F35" }
+            if (!productType && row.line.productName) {
+                productType = { type: row.line.productName, color: "#006F35" }
             }
 
             let current = {
                 when: row.when,
                 delay: row.delay,
-                line: row.product.name,
-                nr: row.product.nr,
-                type: productType.type,
+                line: row.line.name,
+                nr: row.line.class,
+                type: row.line.product,
                 color: productType.color,
                 direction: row.direction
             };
@@ -103,7 +100,7 @@ DbFetcher.prototype.processData = function (data) {
         }
     });
 
-    departuresData.departuresArray.sort(compare);
+//    departuresData.departuresArray.sort(compare);
     return departuresData;
 };
 
